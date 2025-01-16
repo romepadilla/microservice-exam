@@ -2,9 +2,11 @@ package com.microservice.exam.microservice_test.Controller;
 
 import com.microservice.exam.microservice_test.DTO.AccountCreationRequest;
 import com.microservice.exam.microservice_test.DTO.SavingsAccountRequest;
+import com.microservice.exam.microservice_test.DTO.TransactionResponse;
 import com.microservice.exam.microservice_test.Model.Customer;
 import com.microservice.exam.microservice_test.Repository.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,19 +62,33 @@ public class AccountControllerTest {
 
     @Test
     public void testCreateAccount() throws Exception {
+        AccountCreationRequest request = new AccountCreationRequest();
+        request.setCustomerName("Test");
+        request.setCustomerMobile("1234567890");
+        request.setCustomerEmail("test@example.com");
+        request.setAddress1("123 Street");
+        request.setAddress2("456 Road");
+
         mockMvc.perform(post("/api/v1/account")
                         .contentType("application/json")
                         .content(asJsonString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.transactionStatusCode").value(201))
                 .andExpect(jsonPath("$.transactionStatusDescription").value("Customer account created"))
-                .andExpect(jsonPath("$.customerNumber").isNotEmpty())
-                .andExpect(jsonPath("$.customerName").value("Test"));
+                .andExpect(jsonPath("$.customerNumber").exists());
     }
 
     @Test
     //runs independently
     public void testGetCustomerDetails() throws Exception {
+        AccountCreationRequest request = new AccountCreationRequest();
+        request.setCustomerName("Test");
+        request.setCustomerMobile("1234567890");
+        String email = "test" + System.currentTimeMillis() + "@example.com";
+        request.setCustomerEmail(email);
+        request.setAddress1("123 Street");
+        request.setAddress2("456 Road");
+
         mockMvc.perform(post("/api/v1/account")
                         .contentType("application/json")
                         .content(asJsonString(request)))
@@ -83,11 +99,11 @@ public class AccountControllerTest {
 
         mockMvc.perform(get("/api/v1/account/{customerNumber}", customerNumber))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.transactionStatusCode").value(302))
-                .andExpect(jsonPath("$.transactionStatusDescription").value("Customer Account found"))
-                .andExpect(jsonPath("$.customerNumber").value(customerNumber))
-                .andExpect(jsonPath("$.customerName").value("Test"))
-                .andExpect(jsonPath("$.customerEmail").value("test@example.com"));
+                .andExpect(jsonPath("$.transactionStatusCode").value(302))  // Ensure correct status code
+                .andExpect(jsonPath("$.transactionStatusDescription").value("Customer Account found"))  // Correct description
+                .andExpect(jsonPath("$.customerNumber").value(customerNumber))  // Ensure customerNumber is in the response
+                .andExpect(jsonPath("$.customerName").value("Test"))  // Assert customerName
+                .andExpect(jsonPath("$.customerEmail").value("test@example.com"));  // Assert customerEmail
     }
 
     @Test

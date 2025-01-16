@@ -61,10 +61,7 @@ public class AccountService {
         }
 
         customer = customerRepository.save(customer);
-        return new TransactionResponse(customer.getCustomerNumber(), customer.getCustomerName(),
-                customer.getCustomerMobile(), customer.getCustomerEmail(),
-                customer.getAddress1(), customer.getAddress2(),
-                null, 201, "Customer account created");
+        return new TransactionResponse(customer.getCustomerNumber(), 201, "Customer account created");
     }
 
     public TransactionResponse getCustomerDetails(Long customerNumber) {
