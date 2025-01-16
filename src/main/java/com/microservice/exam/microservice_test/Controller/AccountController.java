@@ -2,12 +2,10 @@ package com.microservice.exam.microservice_test.Controller;
 
 import com.microservice.exam.microservice_test.DTO.AccountCreationRequest;
 import com.microservice.exam.microservice_test.DTO.TransactionResponse;
-import com.microservice.exam.microservice_test.DTO.CustomerInquiryResponse;
 import com.microservice.exam.microservice_test.Exception.CustomerNotFoundException;
 import com.microservice.exam.microservice_test.Service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.NestedServletException;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;

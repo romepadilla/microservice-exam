@@ -1,10 +1,8 @@
 package com.microservice.exam.microservice_test.DTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.Transaction;
 
 import java.util.List;
 
